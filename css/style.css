@@ -1,3 +1,21 @@
+#MainHeader
+{
+    
+}
+
+#MainHeader_txt
+{
+    float: left;
+    width: 500px;
+    font-size: 35px;
+}
+
+#ClearStorage
+{
+    margin-top: 15px;
+    margin-left: 375px;
+}
+
 #new
 {
     height: 500px;

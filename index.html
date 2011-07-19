@@ -15,7 +15,11 @@
     <script type="text/javascript" src="js/jquery-ui-1.8.13.custom.min.js"></script>
     <script type="text/javascript">
         
+        var projects = new Array();
+        
         $(document).ready(function(){
+            $("button").button();
+            
             $('.draggable').draggable({ 
                                         cancel: "a.ui-icon", 
                                         revert: "invalid",
@@ -35,12 +39,12 @@
         			}
             });
             
-            $('#done_body').droppable({ 
-                    drop: function( event, ui )
-                    {
-                    	deleteItem( ui.draggable );
-        			}
-            });
+//            $('#done_body').droppable({ 
+//                    drop: function( event, ui )
+//                    {
+//                    	deleteItem( ui.draggable );
+//        			  }
+//            });
             
             $("#new_project").keyup(function(event){
                   if(event.keyCode == 13){
@@ -50,24 +54,55 @@
         
             if("Projects" in localStorage)
             {
-                var projects = localStorage.getItem("Projects");
-                projects = projects.split(";");
+                projects = localStorage.getItem("Projects");
                 
-                for(var i in projects)
+                if(projects != "")
                 {
-                    $("#new_body").append('<div class="draggable grid_2">' + projects[i] + '</div>');
+                    projects = projects.split(";");
+                    
+                    for(var i in projects)
+                    {
+                        var project = projects[i].split("|");
+                        $("#new_body").append('<div id="' + project[0] + '" class="draggable grid_2">' + project[1] + '</div>');
+                    }
+                    reInit();
                 }
-                reInit();
-            }
-            else
-            {
-                var projects = new Array();
+                else
+                {
+                    projects = new Array();
+                }
             }
         });
         
         function deleteItem($item)
         {
             $item.fadeOut();
+            var id = $($item).attr('id');
+            
+            if("Projects" in localStorage)
+            {
+                var temp_proj = localStorage.getItem("Projects");
+                temp_proj = temp_proj.split(";");
+                
+                for(var i in temp_proj)
+                {
+                    var proj = temp_proj[i].split("|");
+                    if(proj[0] == id)
+                    {
+                        temp_proj.splice(i, 1);
+                    }
+                }
+                
+                try {
+                    localStorage.removeItem("Projects");
+                    localStorage.setItem("Projects", temp_proj.join(";")); //store the item in the database
+                } catch (e) {
+                    if (e == QUOTA_EXCEEDED_ERR) 
+                    {
+    		            alert("Quota exceeded!");
+    	            }
+                }
+            }
         }
         
         function addItem($item, $new_parent)
@@ -77,14 +112,16 @@
         
         function add_project()
         {
+            var date = new Date().getTime();
+            
             $proj_name = $("#new_project").val();
             $("#new_project").val("");
             
-            $("#new_body").append('<div class="draggable grid_2">' + $proj_name + '</div>');
+            $("#new_body").append('<div id="' + date + '" class="draggable grid_2">' + $proj_name + '</div>');
             reInit();
             
             //Save the project to localStorage()
-            projects.push($proj_name);
+            projects.push(date + "|" + $proj_name);
             
             try {
                 localStorage.setItem("Projects", projects.join(";")); //store the item in the database
@@ -105,12 +142,19 @@
                                         helper: "clone"
                                       });
         }
+        
+        function clearLocalStorage(area)
+        {
+            localStorage.removeItem(area);
+            window.location.reload();
+        }
     </script>
 </head>
 <body>
     <div class="container_12">
-        <div class="grid_12">
-            <h2>Projects</h2>
+        <div id="MainHeader" class="grid_12">
+            <span id="MainHeader_txt">Project Board</span>
+            <button id="ClearStorage" onclick="clearLocalStorage('Projects')">Clear</button>
         </div>
         <div id="new" class="grid_6">
             <div class="inner">
