@@ -156,16 +156,27 @@
             <span id="MainHeader_txt">Project Board</span>
             <button id="ClearStorage" onclick="clearLocalStorage('Projects')">Clear</button>
         </div>
-        <div id="new" class="grid_6">
-            <div class="inner">
-                <div class="header">
-                    <span class="header_text">New</span>
-                    <span class="new_form">
-                        <input type="text" id="new_project"/>
-                        <button id="btn_add_project" onclick="add_project();">Add</button>
-                    </span>
+        <div class="grid_6">
+            <div id="new">
+                <div class="inner">
+                    <div class="header">
+                        <span class="header_text">New</span>
+                        <span class="new_form">
+                            <input type="text" id="new_project"/>
+                            <button id="btn_add_project" onclick="add_project();">Add</button>
+                        </span>
+                    </div>
+                    <div id="new_body" class="container">
+                    </div>
                 </div>
-                <div id="new_body" class="container">
+            </div>
+            <div id="trash">
+                <div class="inner">
+                    <div class="header">
+                        <span class="header_text">Trash</span>
+                    </div>
+                    <div id="trash_body" class="container">
+                    </div>
                 </div>
             </div>
         </div>
@@ -193,15 +204,6 @@
                     <span class="header_text">Done!</span>
                 </div>
                 <div id="done_body" class="container">
-                </div>
-            </div>
-        </div>
-        <div id="trash" class="grid_12">
-            <div class="inner">
-                <div class="header">
-                    <span class="header_text">Trash</span>
-                </div>
-                <div id="trash_body" class="container">
                 </div>
             </div>
         </div>

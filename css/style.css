@@ -23,24 +23,25 @@
 
 #in_progress
 {
-    height: 195px;
+    height: 200px;
     padding-bottom: 5px;
 }
 
 #pending
 {
-    height: 195px;
+    height: 200px;
     padding-bottom: 5px;
 }
 
 #done
 {
-    height: 100px;
+    height: 200px;
 }
 
 #trash
 {
     margin-top: 5px;
+    height: 105px;
 }
 
 .inner
