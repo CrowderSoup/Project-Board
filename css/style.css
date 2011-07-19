@@ -1,0 +1,70 @@
+#new
+{
+    height: 500px;
+}
+
+#in_progress
+{
+    height: 195px;
+    padding-bottom: 5px;
+}
+
+#pending
+{
+    height: 195px;
+    padding-bottom: 5px;
+}
+
+#done
+{
+    height: 100px;
+}
+
+#trash
+{
+    margin-top: 5px;
+}
+
+.inner
+{
+    border: solid 1px #000000;
+    height: 100%;
+}
+
+.header
+{
+    height: 35px;
+    background-color: #000000;
+    color: #FFFFFF;
+    padding: 5px 5px 5px 5px;
+    text-align: right;
+}
+
+.header_text
+{
+    font-size: 25px;
+    float: left;
+}
+
+.draggable
+{
+    cursor: pointer;
+    background-color: #AFAFAF;
+    padding: 5px 5px 5px 5px;
+    margin: 5px 5px 5px 5px;
+}
+
+#in_progress_body, #pending_body
+{
+    height: 150px;
+}
+
+#done_body
+{
+    height: 55px;
+}
+
+#trash_body
+{
+    height: 150px;
+}

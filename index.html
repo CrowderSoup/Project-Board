@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project Board</title>
+    
+    <!--Styles-->
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/text.css" />
+    <link rel="stylesheet" href="css/960.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/jquery-ui.css" />
+    
+    <!--Scripts-->
+    <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.13.custom.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.draggable').draggable({ 
+                                        cancel: "a.ui-icon", 
+                                        revert: "invalid",
+                                        helper: "clone"
+                                      });
+            $('.container').droppable({ 
+                    drop: function( event, ui )
+                    {
+                    	addItem( ui.draggable, $(this) );
+        			}
+            });
+                
+            $('#trash_body').droppable({ 
+                    drop: function( event, ui )
+                    {
+                		deleteItem( ui.draggable );
+        			}
+            });
+            
+            $('#done_body').droppable({ 
+                    drop: function( event, ui )
+                    {
+                    	deleteItem( ui.draggable );
+        			}
+            });
+            
+            $("#new_project").keyup(function(event){
+                  if(event.keyCode == 13){
+                    $("#btn_add_project").click();
+                  }
+                });
+        });
+        
+        function deleteItem($item)
+        {
+            $item.fadeOut();
+        }
+        
+        function addItem($item, $new_parent)
+        {
+            $new_parent.append($item);
+        }
+        
+        function add_project()
+        {
+            $proj_name = $("#new_project").val();
+            $("#new_project").val("");
+            
+            $("#new_body").append('<div class="draggable grid_2">' + $proj_name + '</div>');
+            reInit();
+        }
+        
+        function reInit()
+        {
+            $('.draggable').draggable('destroy');
+            $('.draggable').draggable({ 
+                                        cancel: "a.ui-icon", 
+                                        revert: "invalid",
+                                        helper: "clone"
+                                      });
+        }
+    </script>
+</head>
+<body>
+    <div class="container_12">
+        <div class="grid_12">
+            <h2>Projects</h2>
+        </div>
+        <div id="new" class="grid_6">
+            <div class="inner">
+                <div class="header">
+                    <span class="header_text">New</span>
+                    <span class="new_form">
+                        <input type="text" id="new_project"/>
+                        <button id="btn_add_project" onclick="add_project();">Add</button>
+                    </span>
+                </div>
+                <div id="new_body" class="container">
+                </div>
+            </div>
+        </div>
+        <div id="in_progress" class="grid_6">
+            <div class="inner">
+                <div class="header">
+                    <span class="header_text">In Progress</span>
+                </div>
+                <div id="in_progress_body" class="container">
+                </div>
+            </div>
+        </div>
+        <div id="pending" class="grid_6">
+            <div class="inner">
+                <div class="header">
+                    <span class="header_text">Pending Client Response</span>
+                </div>
+                <div id="pending_body" class="container">
+                </div>
+            </div>
+        </div>
+        <div id="done" class="grid_6">
+            <div class="inner">
+                <div class="header">
+                    <span class="header_text">Done!</span>
+                </div>
+                <div id="done_body" class="container">
+                </div>
+            </div>
+        </div>
+        <div id="trash" class="grid_12">
+            <div class="inner">
+                <div class="header">
+                    <span class="header_text">Trash</span>
+                </div>
+                <div id="trash_body" class="container">
+                </div>
+            </div>
+        </div>
+    </div>
