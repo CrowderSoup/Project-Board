@@ -10,7 +10,7 @@ To use project board simply download the source and run open up index.html in a 
 
 There are plans to add the following very soon:
 
-1) Data Persistence
-2) Color coding based on importance
-3) Adding a due date
-4) Adding notes / description to a project when you drill into it
+1) Data Persistence\n
+2) Color coding based on importance\n
+3) Adding a due date\n
+4) Adding notes / description to a project when you drill into it\n
