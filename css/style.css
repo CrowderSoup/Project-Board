@@ -72,6 +72,8 @@
     background-color: #AFAFAF;
     padding: 5px 5px 5px 5px;
     margin: 5px 5px 5px 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
 
 #new_body, #in_progress_body, #pending_body, #done_body, #trash_body
