@@ -6,11 +6,18 @@ $(document).ready(function(){
     $("#add_proj_dialog").dialog({ 
                                     modal: true, 
                                     autoOpen: false,
+                                    height: 200,
+                                    width: 400,
                                     buttons: {
                                                 "Save": function() { save_project(); },
                                                 "Cancel": function() { $('#add_proj_dialog').dialog('close') }
                                              }
                                 });
+    
+    $('#color_picker').colorpicker({
+                                size: 15,
+                                label: 'Project Color: '
+                            });
     
     $('.draggable').draggable({ 
                                 cancel: "a.ui-icon", 
