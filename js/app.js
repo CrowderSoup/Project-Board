@@ -1,4 +1,4 @@
-var projects = new Array();
+var projects = artemia.getStore({type : 'local', base : 'Projects'});
         
 $(document).ready(function(){
     $("button").button();
@@ -35,7 +35,7 @@ $(document).ready(function(){
     $('.container').droppable({ 
             drop: function( event, ui )
             {
-                addItem( ui.draggable, $(this) );
+                moveItem( ui.draggable, $(this) );
 			}
     });
         
@@ -46,39 +46,21 @@ $(document).ready(function(){
 			}
     });
     
-//            $('#done_body').droppable({ 
-//                    drop: function( event, ui )
-//                    {
-//                    	deleteItem( ui.draggable );
-//        			  }
-//            });
-    
     $("#new_project").keyup(function(event){
           if(event.keyCode == 13){
             quick_add_project();
           }
         });
 
-    if("Projects" in localStorage)
+    projects.all(function(proj)
     {
-        projects = localStorage.getItem("Projects");
-        
-        if(projects != "")
+        var i;
+        for(i = 0; i < proj.length; i += 1 )
         {
-            projects = projects.split(";");
-            
-            for(var i in projects)
-            {
-                var project = projects[i].split("|");
-                $("#new_body").append('<div id="' + project[0] + '" class="draggable grid_2">' + project[1] + '</div>');
-            }
-            reInit();
+            $("#" + proj[i].location).append('<div id="' + proj[i].key + '" class="draggable grid_2" style="background-color: #' + proj[i].color + ';">' + proj[i].name + '</div>');
         }
-        else
-        {
-            projects = new Array();
-        }
-    }
+        reInit();
+    });
 });
 
 function deleteItem($item)
@@ -86,35 +68,19 @@ function deleteItem($item)
     $item.fadeOut();
     var id = $($item).attr('id');
     
-    if("Projects" in localStorage)
-    {
-        var temp_proj = localStorage.getItem("Projects");
-        temp_proj = temp_proj.split(";");
-        
-        for(var i in temp_proj)
-        {
-            var proj = temp_proj[i].split("|");
-            if(proj[0] == id)
-            {
-                temp_proj.splice(i, 1);
-            }
-        }
-        
-        try {
-            localStorage.removeItem("Projects");
-            localStorage.setItem("Projects", temp_proj.join(";")); //store the item in the database
-        } catch (e) {
-            if (e == QUOTA_EXCEEDED_ERR) 
-            {
-	            alert("Quota exceeded!");
-            }
-        }
-    }
+    myStore.remove(id, function(r) { /*callback function*/ });
 }
 
-function addItem($item, $new_parent)
+function moveItem($item, $new_parent)
 {
     $new_parent.append($item);
+    
+    var key = $($item).attr('id');
+    
+    projects.get(key, function(r) {
+        r.location = $($new_parent).attr('id');
+        projects.save(r, function(r) { /*callback function*/ });
+    });
 }
 
 function quick_add_project()
@@ -124,20 +90,19 @@ function quick_add_project()
     $proj_name = $("#new_project").val();
     $("#new_project").val("");
     
-    $("#new_body").append('<div id="' + date + '" class="draggable grid_2">' + $proj_name + '</div>');
+    $("#new_body").append('<div id="' + date + '" class="draggable grid_2" style="background-color: #AFAFAF;">' + $proj_name + '</div>');
     reInit();
     
     //Save the project to localStorage()
-    projects.push(date + "|" + $proj_name);
-    
-    try {
-        localStorage.setItem("Projects", projects.join(";")); //store the item in the database
-    } catch (e) {
-        if (e == QUOTA_EXCEEDED_ERR) 
-        {
-            alert("Quota exceeded!");
-        }
-    }
+    var proj = {
+                    key: date,
+                    name: $proj_name,
+                    color: 'AFAFAF',
+                    description: '',
+                    due: '',
+                    location: 'new_body'
+               };
+    projects.save(proj, function(r) { /*callback function*/ });
 }
 
 function add_project()
@@ -154,20 +119,19 @@ function save_project()
     
     $proj_name = $("#proj_name").val();
     
-    $("#new_body").append('<div id="' + date + '" class="draggable grid_2">' + $proj_name + '</div>');
+    $("#new_body").append('<div id="' + date + '" class="draggable grid_2" style="background-color: #' + $("#color_picker option:selected").text() + ';">' + $proj_name + '</div>');
     reInit();
     
     //Save the project to localStorage()
-    projects.push(date + "|" + $proj_name);
-    
-    try {
-        localStorage.setItem("Projects", projects.join(";")); //store the item in the database
-    } catch (e) {
-        if (e == QUOTA_EXCEEDED_ERR) 
-        {
-            alert("Quota exceeded!");
-        }
-    }
+    var proj = {
+                    key: date,
+                    name: $proj_name,
+                    color: $("#color_picker option:selected").text(),
+                    description: $("#proj_description").val(),
+                    due: $("#proj_due").val(),
+                    location: 'new_body'
+               };
+    projects.save(proj, function(r) { /*callback function*/ });
     
     $("#add_proj_dialog").dialog("close");
     $("#new_project").val("");
@@ -188,6 +152,6 @@ function reInit()
 
 function clearLocalStorage(area)
 {
-    localStorage.removeItem(area);
+    projects.drop(function(r) { /*callback function*/ });
     window.location.reload();
 }
