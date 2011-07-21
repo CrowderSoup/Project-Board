@@ -6,11 +6,17 @@ $(document).ready(function(){
     $("#add_proj_dialog").dialog({ 
                                     modal: true, 
                                     autoOpen: false,
-                                    height: 200,
-                                    width: 400,
+                                    height: 300,
+                                    width: 540,
                                     buttons: {
                                                 "Save": function() { save_project(); },
-                                                "Cancel": function() { $('#add_proj_dialog').dialog('close') }
+                                                "Cancel": function() { 
+                                                                        $('#add_proj_dialog').dialog('close');
+                                                                        $("#new_project").val("");
+                                                                        $("#proj_name").val("");
+                                                                        $("#proj_due").val("");
+                                                                        $("#proj_description").val("");
+                                                                     }
                                              }
                                 });
     
@@ -18,6 +24,8 @@ $(document).ready(function(){
                                 size: 15,
                                 label: 'Project Color: '
                             });
+    
+    $('#proj_due').datepicker();
     
     $('.draggable').draggable({ 
                                 cancel: "a.ui-icon", 
@@ -145,8 +153,6 @@ function save_project()
     var date = new Date().getTime();
     
     $proj_name = $("#proj_name").val();
-    $("#new_project").val("");
-    $("#proj_name").val("");
     
     $("#new_body").append('<div id="' + date + '" class="draggable grid_2">' + $proj_name + '</div>');
     reInit();
@@ -164,6 +170,10 @@ function save_project()
     }
     
     $("#add_proj_dialog").dialog("close");
+    $("#new_project").val("");
+    $("#proj_name").val("");
+    $("#proj_due").val("");
+    $("#proj_description").val("");
 }
 
 function reInit()
