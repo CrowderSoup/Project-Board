@@ -13,7 +13,7 @@
 #ClearStorage
 {
     margin-top: 15px;
-    margin-left: 375px;
+    margin-left: 374px;
 }
 
 #new
@@ -72,6 +72,12 @@
     background-color: #AFAFAF;
     padding: 5px 5px 5px 5px;
     margin: 5px 5px 5px 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.textbox
+{
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
