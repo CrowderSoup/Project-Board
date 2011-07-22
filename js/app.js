@@ -68,7 +68,7 @@ function deleteItem($item)
     $item.fadeOut();
     var id = $($item).attr('id');
     
-    myStore.remove(id, function(r) { /*callback function*/ });
+    projects.remove(id, function(r) { /*callback function*/ });
 }
 
 function moveItem($item, $new_parent)
