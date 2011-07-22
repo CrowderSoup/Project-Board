@@ -24,8 +24,38 @@ $(document).ready(function(){
                                 size: 15,
                                 label: 'Project Color: '
                             });
+    $('#color_picker_e').colorpicker({
+                                size: 15,
+                                label: 'Project Color: '
+                            });
     
     $('#proj_due').datepicker();
+    $('#proj_due_e').datepicker();
+    
+    $("#drill_into_proj").dialog({ 
+                                    modal: true, 
+                                    autoOpen: false,
+                                    height: 300,
+                                    width: 540,
+                                    buttons: {
+                                                "Ok": function() { $('#drill_into_proj').dialog('close'); },
+                                                "Edit": function() { 
+                                                                        $('#add_proj_dialog').dialog('close');
+                                                                        editItem($("#proj_id_dd").html());
+                                                                     }
+                                             }
+                                });
+    
+    $("#edit_proj_dialog").dialog({ 
+                                    modal: true, 
+                                    autoOpen: false,
+                                    height: 300,
+                                    width: 540,
+                                    buttons: {
+                                                "Save": function() { finish_editItem(); },
+                                                "Cancel": function() { $('#edit_proj_dialog').dialog('close'); }
+                                             }
+                                });
     
     $('.draggable').draggable({ 
                                 cancel: "a.ui-icon", 
@@ -57,7 +87,10 @@ $(document).ready(function(){
         var i;
         for(i = 0; i < proj.length; i += 1 )
         {
-            $("#" + proj[i].location).append('<div id="' + proj[i].key + '" class="draggable grid_2" style="background-color: #' + proj[i].color + ';">' + proj[i].name + '</div>');
+            $("#" + proj[i].location).append('<div id="' + proj[i].key + '" class="draggable grid_2" style="background-color: #' + proj[i].color + ';">' + 
+                                                proj[i].name +
+                                                '<br/><center><a href="#" onclick="drillInto(' + proj[i].key + ');">View</a> | <a href="#" onclick="editItem(' + proj[i].key + ');">Edit</a></center>' +
+                                             '</div>');
         }
         reInit();
     });
@@ -90,7 +123,10 @@ function quick_add_project()
     $proj_name = $("#new_project").val();
     $("#new_project").val("");
     
-    $("#new_body").append('<div id="' + date + '" class="draggable grid_2" style="background-color: #AFAFAF;">' + $proj_name + '</div>');
+    $("#new_body").append('<div id="' + date + '" class="draggable grid_2" style="background-color: #AFAFAF;">' + 
+                            $proj_name +
+                            '<br/><center><a href="#" onclick="drillInto(' + date + ');">View</a> | <a href="#" onclick="editItem(' + date + ');">Edit</a></center>' +
+                          '</div>');
     reInit();
     
     //Save the project to localStorage()
@@ -119,7 +155,10 @@ function save_project()
     
     $proj_name = $("#proj_name").val();
     
-    $("#new_body").append('<div id="' + date + '" class="draggable grid_2" style="background-color: #' + $("#color_picker option:selected").text() + ';">' + $proj_name + '</div>');
+    $("#new_body").append('<div id="' + date + '" class="draggable grid_2" style="background-color: #' + $("#color_picker option:selected").text() + ';">' + 
+                            $proj_name +
+                            '<br/><center><a href="#" onclick="drillInto(' + date + ');">View</a> | <a href="#" onclick="editItem(' + date + ');">Edit</a></center>' +
+                          '</div>');
     reInit();
     
     //Save the project to localStorage()
@@ -138,6 +177,47 @@ function save_project()
     $("#proj_name").val("");
     $("#proj_due").val("");
     $("#proj_description").val("");
+}
+
+function drillInto($id)
+{
+    projects.get($id, function(r) {
+        $("#proj_name_dd").html(r.name);
+        $("#proj_due_dd").html(r.due);
+        $("#proj_description_dd").html(r.description);
+        $("#proj_id_dd").html(r.key);
+        
+        $("#drill_into_proj").dialog("open");
+    });
+}
+
+function editItem($id)
+{
+    projects.get($id, function(r) {
+        $("#proj_name_e").val(r.name);
+        $("#proj_due_e").val(r.due);
+        $("#proj_description_e").val(r.description);
+        $("#proj_id_e").html(r.key);
+        $("#proj_loc_e").html(r.location);
+        
+        $("#edit_proj_dialog").dialog("open");
+    });
+}
+
+function finish_editItem()
+{    
+    //Save the project to localStorage()
+    var proj = {
+                    key: $("#proj_id_e").html(),
+                    name: $("#proj_name_e").val(),
+                    color: $("#color_picker_e option:selected").text(),
+                    description: $("#proj_description_e").val(),
+                    due: $("#proj_due_e").val(),
+                    location: $("#proj_loc_e").html()
+               };
+    projects.save(proj, function(r) { /*callback function*/ });
+    
+    window.location.reload();
 }
 
 function reInit()
