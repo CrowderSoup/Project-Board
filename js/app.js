@@ -6,7 +6,7 @@ $(document).ready(function(){
     $("#add_proj_dialog").dialog({ 
                                     modal: true, 
                                     autoOpen: false,
-                                    height: 300,
+                                    height: 350,
                                     width: 540,
                                     buttons: {
                                                 "Save": function() { save_project(); },
@@ -49,7 +49,7 @@ $(document).ready(function(){
     $("#edit_proj_dialog").dialog({ 
                                     modal: true, 
                                     autoOpen: false,
-                                    height: 300,
+                                    height: 350,
                                     width: 540,
                                     buttons: {
                                                 "Save": function() { finish_editItem(); },
@@ -72,7 +72,7 @@ $(document).ready(function(){
     $('#trash_body').droppable({ 
             drop: function( event, ui )
             {
-        		deleteItem( ui.draggable );
+                deleteItem( ui.draggable );
 			}
     });
     
@@ -199,6 +199,7 @@ function editItem($id)
         $("#proj_description_e").val(r.description);
         $("#proj_id_e").html(r.key);
         $("#proj_loc_e").html(r.location);
+        $('#color_picker_e option').eq(r.color).attr('selected', 'selected');
         
         $("#edit_proj_dialog").dialog("open");
     });
