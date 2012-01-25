@@ -136,6 +136,7 @@ function quick_add_project()
                     color: 'AFAFAF',
                     description: '',
                     due: '',
+                    url: '',
                     location: 'new_body'
                };
     projects.save(proj, function(r) { /*callback function*/ });
@@ -168,6 +169,7 @@ function save_project()
                     color: $("#color_picker option:selected").text(),
                     description: $("#proj_description").val(),
                     due: $("#proj_due").val(),
+                    url: $("#proj_url").val(),
                     location: 'new_body'
                };
     projects.save(proj, function(r) { /*callback function*/ });
@@ -186,6 +188,8 @@ function drillInto($id)
         $("#proj_due_dd").html(r.due);
         $("#proj_description_dd").html(r.description);
         $("#proj_id_dd").html(r.key);
+        $("#proj_url_dd").attr('href', r.url);
+        $("#proj_url_dd").html(r.url);
         
         $("#drill_into_proj").dialog("open");
     });
@@ -196,6 +200,7 @@ function editItem($id)
     projects.get($id, function(r) {
         $("#proj_name_e").val(r.name);
         $("#proj_due_e").val(r.due);
+        $("#proj_url_e").val(r.url);
         $("#proj_description_e").val(r.description);
         $("#proj_id_e").html(r.key);
         $("#proj_loc_e").html(r.location);
@@ -214,6 +219,7 @@ function finish_editItem()
                     color: $("#color_picker_e option:selected").text(),
                     description: $("#proj_description_e").val(),
                     due: $("#proj_due_e").val(),
+                    url: $("#proj_url_e").val(),
                     location: $("#proj_loc_e").html()
                };
     projects.save(proj, function(r) { /*callback function*/ });
