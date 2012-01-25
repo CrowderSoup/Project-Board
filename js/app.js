@@ -266,7 +266,9 @@ function GetNotes()
     notes.query(GetProjectNotes, function(r) {
         var i;
         for(i = 0; i < r.length; i += 1 ) {
-            noteSTR += "<p>" + r[i].body + "<br/><br/><i>Posted On: " + r[i].key + "</i></p>";
+            var date = new Date(r[i].key * 1);
+            
+            noteSTR += "<p>" + r[i].body + "<br/><br/><i>Posted On: " + date.toUTCString() + "</i></p>";
         }
     });
     
