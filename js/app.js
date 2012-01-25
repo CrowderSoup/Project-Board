@@ -1,7 +1,12 @@
 var projects = artemia.getStore({type : 'local', base : 'Projects'});
+var notes = artemia.getStore({type : 'local', base : 'Notes'});
         
 $(document).ready(function(){
     $("button").button();
+    
+    $("#SaveNote_BTN").click(function() {
+        SaveNote();
+    });
     
     $("#add_proj_dialog").dialog({ 
                                     modal: true, 
@@ -35,8 +40,8 @@ $(document).ready(function(){
     $("#drill_into_proj").dialog({ 
                                     modal: true, 
                                     autoOpen: false,
-                                    height: 300,
-                                    width: 540,
+                                    height: 600,
+                                    width: 980,
                                     buttons: {
                                                 "Ok": function() { $('#drill_into_proj').dialog('close'); },
                                                 "Edit": function() { 
@@ -191,6 +196,8 @@ function drillInto($id)
         $("#proj_url_dd").attr('href', r.url);
         $("#proj_url_dd").html(r.url);
         
+        GetNotes();
+        
         $("#drill_into_proj").dialog("open");
     });
 }
@@ -240,5 +247,48 @@ function reInit()
 function clearLocalStorage(area)
 {
     projects.drop(function(r) { /*callback function*/ });
+    notes.drop(function(r) { /*callback function*/ });
     window.location.reload();
+}
+
+/*-----------------------------------------
+    Notes
+-----------------------------------------*/
+var GetProjectNotes = function(note) {
+    if(note.projID == $("#proj_id_dd").html())
+        return note
+};
+
+function GetNotes()
+{
+    var noteSTR = "";
+
+    notes.query(GetProjectNotes, function(r) {
+        var i;
+        for(i = 0; i < r.length; i += 1 ) {
+            noteSTR += "<p>" + r[i].body + "<br/><br/><i>Posted On: " + r[i].key + "</i></p>";
+        }
+    });
+    
+    $("#dd_Notes").html(noteSTR);
+}
+
+function SaveNote()
+{
+    if($("#NewNoteBody").val() != "")
+    {
+        var date = new Date().getTime();
+        
+        var note = {
+                        key: date,
+                        projID: $("#proj_id_dd").html(),
+                        body: $("#NewNoteBody").val()
+                   };
+        notes.save(note, function(r) {  });
+        
+        $("#NewNoteBody").val("");
+        GetNotes();
+    }
+    else
+        alert("You must enter a note before saving it.");
 }

@@ -68,6 +68,34 @@ a:hover
     text-align: center;
 }
 
+#dd_ProjInfo
+{
+    display: inline-block;
+    width: 100%;
+    float: left;
+}
+
+#dd_ProjNotes
+{
+    display: inline-block;
+    width: 100%;
+    float: left;
+}
+
+#dd_ProjInfo_HeaderDescrip
+{
+    display: inline-block;
+    width: 50%;
+    float: left;
+}
+
+#dd_ProjInfo_DueURL
+{
+    display: inline-block;
+    width: 50%;
+    float: right;
+}
+
 .inner
 {
     height: 100%;

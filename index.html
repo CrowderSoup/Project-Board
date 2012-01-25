@@ -84,9 +84,9 @@
     <div id="add_proj_dialog" title="Add a Project">
         <label for="proj_name">Project Name:</label><input type="textbox" id="proj_name" class="textbox" />
         <label for="proj_due">Due date:</label><input type="textbox" id="proj_due" class="textbox" /><br/>
+        <label for="proj_url">Project URL:</label><input type="textbox" id="proj_url" class="textbox" style="width: 420px" /><br/>
         <label for="proj_description">Description</lable><br/>
         <textarea id="proj_description" cols="69" rows="5" class="textbox"></textarea>
-        <label for="proj_url">Project URL:</label><input type="textbox" id="proj_url" class="textbox" style="width: 420px" /><br/>
         <select id="color_picker" class="color_picker">
             <option value="AFAFAF">AFAFAF</option>
             <option value="E2161E">E2161E</option>
@@ -96,22 +96,13 @@
         </select>
     </div>
     
-    <!-- Drill Down Dialog -->
-    <div id="drill_into_proj" title="View your Project">
-        <h3><span id="proj_name_dd"></span></h3>
-        <p><span id="proj_description_dd"></span></p>
-        <p><i>Due on: <span id="proj_due_dd"></span></i></p>
-        <p><i>URL:</i> <a id="proj_url_dd" target="_blank"></a></p>
-        <span id="proj_id_dd" style="display: none;"></span>
-    </div>
-    
     <!-- Edit Project Dialog -->
     <div id="edit_proj_dialog" title="Edit your Project">
         <label for="proj_name_e">Project Name:</label><input type="textbox" id="proj_name_e" class="textbox" />
         <label for="proj_due_e">Due date:</label><input type="textbox" id="proj_due_e" class="textbox" /><br/>
-        <label for="proj_description_e">Description</lable><br/>
-        <textarea id="proj_description_e" cols="69" rows="5" class="textbox"></textarea>
         <label for="proj_url_e">Project URL:</label><input type="textbox" id="proj_url_e" class="textbox" style="width: 420px" /><br/>
+        <label for="proj_description_e">Description</label><br/>
+        <textarea id="proj_description_e" cols="69" rows="5" class="textbox"></textarea>
         <select id="color_picker_e">
             <option value="AFAFAF">AFAFAF</option>
             <option value="E2161E">E2161E</option>
@@ -121,6 +112,29 @@
         </select>
         <span id="proj_id_e" style="display: none;"></span>
         <span id="proj_loc_e" style="display: none;"></span>
+    </div>
+    
+    <!-- Drill Down Dialog -->
+    <div id="drill_into_proj" title="View your Project">
+        <div id="dd_ProjInfo">
+            <div id="dd_ProjInfo_HeaderDescrip">
+                <h3><span id="proj_name_dd"></span></h3>
+                <p><span id="proj_description_dd"></span></p>
+            </div>
+            <div id="dd_ProjInfo_DueURL">
+                <p><i>Due on: <span id="proj_due_dd"></span></i></p>
+                <p><i>URL:</i> <a id="proj_url_dd" target="_blank"></a></p>
+            </div>
+            <span id="proj_id_dd" style="display: none;"></span>
+        </div>
+        <div id="dd_ProjNotes">
+            <h3>Notes:</h3>
+            <label for="NewNoteBody">Add Note:</label><br/>
+            <textarea id="NewNoteBody" cols="130" rows="3" class="textbox"></textarea><br/>
+            <button id="SaveNote_BTN" type="button">Save Note</button>
+            
+            <div id="dd_Notes"></div>
+        </div>
     </div>
 </body>
 </html>
