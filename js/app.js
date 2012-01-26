@@ -125,11 +125,11 @@ function quick_add_project()
 {
     var date = new Date().getTime();
     
-    $proj_name = $("#new_project").val();
+    var proj_name = $("#new_project").val();
     $("#new_project").val("");
     
     $("#new_body").append('<div id="' + date + '" class="draggable grid_2" style="background-color: #AFAFAF;">' + 
-                            $proj_name +
+                            proj_name +
                             '<br/><center><a href="#" onclick="drillInto(' + date + ');">View</a> | <a href="#" onclick="editItem(' + date + ');">Edit</a></center>' +
                           '</div>');
     reInit();
@@ -137,7 +137,7 @@ function quick_add_project()
     //Save the project to localStorage()
     var proj = {
                     key: date,
-                    name: $proj_name,
+                    name: proj_name,
                     color: 'AFAFAF',
                     description: '',
                     due: '',
@@ -159,10 +159,10 @@ function save_project()
 {    
     var date = new Date().getTime();
     
-    $proj_name = $("#proj_name").val();
+    var proj_name = $("#proj_name").val();
     
     $("#new_body").append('<div id="' + date + '" class="draggable grid_2" style="background-color: #' + $("#color_picker option:selected").text() + ';">' + 
-                            $proj_name +
+                            proj_name +
                             '<br/><center><a href="#" onclick="drillInto(' + date + ');">View</a> | <a href="#" onclick="editItem(' + date + ');">Edit</a></center>' +
                           '</div>');
     reInit();
@@ -170,7 +170,7 @@ function save_project()
     //Save the project to localStorage()
     var proj = {
                     key: date,
-                    name: $proj_name,
+                    name: proj_name,
                     color: $("#color_picker option:selected").text(),
                     description: $("#proj_description").val(),
                     due: $("#proj_due").val(),
@@ -244,7 +244,7 @@ function reInit()
                               });
 }
 
-function clearLocalStorage(area)
+function clearLocalStorage()
 {
     projects.drop(function(r) { /*callback function*/ });
     notes.drop(function(r) { /*callback function*/ });
@@ -259,11 +259,18 @@ var GetProjectNotes = function(note) {
         return note
 };
 
+function SortNotes(a, b)
+{
+    return b.key - a.key
+}
+
 function GetNotes()
 {
     var noteSTR = "";
 
     notes.query(GetProjectNotes, function(r) {
+        r.sort(SortNotes);
+        
         var i;
         for(i = 0; i < r.length; i += 1 ) {
             var date = new Date(r[i].key * 1);
