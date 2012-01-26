@@ -107,7 +107,25 @@ function deleteItem($item)
     var id = $($item).attr('id');
     
     projects.remove(id, function(r) { /*callback function*/ });
+    DeleteNotes(id);
 }
+
+function DeleteNotes(id)
+{
+    var GetProjectNotes_ToDelete = function(note) {
+        if(note.projID == id)
+            return note;
+    };
+    
+    notes.query(GetProjectNotes_ToDelete, function(r) {
+        var i;
+        for(i = 0; i < r.length; i += 1 ) {
+            notes.remove(r[i].key, function(r) { /*callback function*/ });
+        }
+    });
+}
+
+
 
 function moveItem($item, $new_parent)
 {
@@ -256,12 +274,12 @@ function clearLocalStorage()
 -----------------------------------------*/
 var GetProjectNotes = function(note) {
     if(note.projID == $("#proj_id_dd").html())
-        return note
+        return note;
 };
 
 function SortNotes(a, b)
 {
-    return b.key - a.key
+    return b.key - a.key;
 }
 
 function GetNotes()
@@ -287,7 +305,7 @@ function GetNotes()
 
 function SaveNote()
 {
-    if($("#NewNoteBody").val() != "")
+    if($("#NewNoteBody").val() !== "")
     {
         var date = new Date().getTime();
         
