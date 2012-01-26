@@ -274,8 +274,11 @@ function GetNotes()
         var i;
         for(i = 0; i < r.length; i += 1 ) {
             var date = new Date(r[i].key * 1);
+            var dateSTR = date.toString();
+            var dateARR = dateSTR.split("GMT");
+            dateSTR = dateARR[0];
             
-            noteSTR += "<p>" + r[i].body + "<br/><br/><i>Posted On: " + date.toUTCString() + "</i></p>";
+            noteSTR += "<p>" + r[i].body + "<br/><br/><i>Posted On: " + dateSTR + "</i></p>";
         }
     });
     
