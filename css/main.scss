@@ -1,0 +1,23 @@
+/* Variables */
+$masthead-bg: #428bca;
+$masthead-border: #3D7FB9;
+$navbar-text-color: #ECECEC;
+$light-font: #999999;
+
+/* Styles */
+nav.navbar {
+    border-radius: 0;
+}
+
+nav.navbar-default, nav.navbar-inverse {
+    background-color: $masthead-bg;
+    border-color: $masthead-border;
+
+    .navbar-brand {
+        color: $navbar-text-color;
+    }
+
+    .navbar-nav>li>a {
+        color: $navbar-text-color;
+    }
+}
