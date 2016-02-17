@@ -6,9 +6,15 @@
   "license": "GPL-3.0",
   "dependencies": {
     "bootstrap": "^3.3.6",
+    "browserify": "^13.0.0",
     "del": "^2.2.0",
+    "dragula": "^3.6.6",
     "font-awesome": "^4.5.0",
     "gulp": "^3.9.0",
-    "gulp-sass": "^2.1.1"
+    "gulp-sass": "^2.1.1",
+    "jquery": "^2.2.0",
+    "lawnchair": "^0.6.4",
+    "piklor.js": "^1.2.0",
+    "vinyl-source-stream": "^1.1.0"
   }
 }

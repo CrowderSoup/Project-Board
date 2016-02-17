@@ -1,4 +1,9 @@
 node_modules/*
 static/bootstrap/*
 static/font-awesome/*
+static/jquery/*
+static/dragula/*
+static/lawnchair/*
+static/piklor/*
 static/main.css
+app/app-built.js

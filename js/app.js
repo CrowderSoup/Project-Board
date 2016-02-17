@@ -1,21 +1,21 @@
 var projects = artemia.getStore({type : 'local', base : 'Projects'});
 var notes = artemia.getStore({type : 'local', base : 'Notes'});
-        
+
 $(document).ready(function(){
     $("button").button();
-    
+
     $("#SaveNote_BTN").click(function() {
         SaveNote();
     });
-    
-    $("#add_proj_dialog").dialog({ 
-                                    modal: true, 
+
+    $("#add_proj_dialog").dialog({
+                                    modal: true,
                                     autoOpen: false,
                                     height: 350,
                                     width: 540,
                                     buttons: {
                                                 "Save": function() { save_project(); },
-                                                "Cancel": function() { 
+                                                "Cancel": function() {
                                                                         $('#add_proj_dialog').dialog('close');
                                                                         $("#new_project").val("");
                                                                         $("#proj_name").val("");
@@ -24,7 +24,7 @@ $(document).ready(function(){
                                                                      }
                                              }
                                 });
-    
+
     $('#color_picker').colorpicker({
                                 size: 15,
                                 label: 'Project Color: '
@@ -33,26 +33,26 @@ $(document).ready(function(){
                                 size: 15,
                                 label: 'Project Color: '
                             });
-    
+
     $('#proj_due').datepicker();
     $('#proj_due_e').datepicker();
-    
-    $("#drill_into_proj").dialog({ 
-                                    modal: true, 
+
+    $("#drill_into_proj").dialog({
+                                    modal: true,
                                     autoOpen: false,
                                     height: 600,
                                     width: 980,
                                     buttons: {
                                                 "Ok": function() { $('#drill_into_proj').dialog('close'); },
-                                                "Edit": function() { 
+                                                "Edit": function() {
                                                                         $('#add_proj_dialog').dialog('close');
                                                                         editItem($("#proj_id_dd").html());
                                                                      }
                                              }
                                 });
-    
-    $("#edit_proj_dialog").dialog({ 
-                                    modal: true, 
+
+    $("#edit_proj_dialog").dialog({
+                                    modal: true,
                                     autoOpen: false,
                                     height: 350,
                                     width: 540,
@@ -61,26 +61,26 @@ $(document).ready(function(){
                                                 "Cancel": function() { $('#edit_proj_dialog').dialog('close'); }
                                              }
                                 });
-    
-    $('.draggable').draggable({ 
-                                cancel: "a.ui-icon", 
+
+    $('.draggable').draggable({
+                                cancel: "a.ui-icon",
                                 revert: "invalid",
                                 helper: "clone"
                               });
-    $('.container').droppable({ 
+    $('.container').droppable({
             drop: function( event, ui )
             {
                 moveItem( ui.draggable, $(this) );
 			}
     });
-        
-    $('#trash_body').droppable({ 
+
+    $('#trash_body').droppable({
             drop: function( event, ui )
             {
                 deleteItem( ui.draggable );
 			}
     });
-    
+
     $("#new_project").keyup(function(event){
           if(event.keyCode == 13){
             quick_add_project();
@@ -92,7 +92,7 @@ $(document).ready(function(){
         var i;
         for(i = 0; i < proj.length; i += 1 )
         {
-            $("#" + proj[i].location).append('<div id="' + proj[i].key + '" class="draggable grid_2" style="background-color: #' + proj[i].color + ';">' + 
+            $("#" + proj[i].location).append('<div id="' + proj[i].key + '" class="draggable grid_2" style="background-color: #' + proj[i].color + ';">' +
                                                 proj[i].name +
                                                 '<br/><center><a href="#" onclick="drillInto(' + proj[i].key + ');">View</a> | <a href="#" onclick="editItem(' + proj[i].key + ');">Edit</a></center>' +
                                              '</div>');
@@ -105,7 +105,7 @@ function deleteItem($item)
 {
     $item.fadeOut();
     var id = $($item).attr('id');
-    
+
     projects.remove(id, function(r) { /*callback function*/ });
     DeleteNotes(id);
 }
@@ -116,7 +116,7 @@ function DeleteNotes(id)
         if(note.projID == id)
             return note;
     };
-    
+
     notes.query(GetProjectNotes_ToDelete, function(r) {
         var i;
         for(i = 0; i < r.length; i += 1 ) {
@@ -130,9 +130,9 @@ function DeleteNotes(id)
 function moveItem($item, $new_parent)
 {
     $new_parent.append($item);
-    
+
     var key = $($item).attr('id');
-    
+
     projects.get(key, function(r) {
         r.location = $($new_parent).attr('id');
         projects.save(r, function(r) { /*callback function*/ });
@@ -142,16 +142,16 @@ function moveItem($item, $new_parent)
 function quick_add_project()
 {
     var date = new Date().getTime();
-    
+
     var proj_name = $("#new_project").val();
     $("#new_project").val("");
-    
-    $("#new_body").append('<div id="' + date + '" class="draggable grid_2" style="background-color: #AFAFAF;">' + 
+
+    $("#new_body").append('<div id="' + date + '" class="draggable grid_2" style="background-color: #AFAFAF;">' +
                             proj_name +
                             '<br/><center><a href="#" onclick="drillInto(' + date + ');">View</a> | <a href="#" onclick="editItem(' + date + ');">Edit</a></center>' +
                           '</div>');
     reInit();
-    
+
     //Save the project to localStorage()
     var proj = {
                     key: date,
@@ -168,23 +168,23 @@ function quick_add_project()
 function add_project()
 {
     $("#add_proj_dialog").dialog("open");
-    
+
     //Set Project Name
     $("#proj_name").val($("#new_project").val());
 }
 
 function save_project()
-{    
+{
     var date = new Date().getTime();
-    
+
     var proj_name = $("#proj_name").val();
-    
-    $("#new_body").append('<div id="' + date + '" class="draggable grid_2" style="background-color: #' + $("#color_picker option:selected").text() + ';">' + 
+
+    $("#new_body").append('<div id="' + date + '" class="draggable grid_2" style="background-color: #' + $("#color_picker option:selected").text() + ';">' +
                             proj_name +
                             '<br/><center><a href="#" onclick="drillInto(' + date + ');">View</a> | <a href="#" onclick="editItem(' + date + ');">Edit</a></center>' +
                           '</div>');
     reInit();
-    
+
     //Save the project to localStorage()
     var proj = {
                     key: date,
@@ -196,7 +196,7 @@ function save_project()
                     location: 'new_body'
                };
     projects.save(proj, function(r) { /*callback function*/ });
-    
+
     $("#add_proj_dialog").dialog("close");
     $("#new_project").val("");
     $("#proj_name").val("");
@@ -213,9 +213,9 @@ function drillInto($id)
         $("#proj_id_dd").html(r.key);
         $("#proj_url_dd").attr('href', r.url);
         $("#proj_url_dd").html(r.url);
-        
+
         GetNotes();
-        
+
         $("#drill_into_proj").dialog("open");
     });
 }
@@ -230,13 +230,13 @@ function editItem($id)
         $("#proj_id_e").html(r.key);
         $("#proj_loc_e").html(r.location);
         $('#color_picker_e option').eq(r.color).attr('selected', 'selected');
-        
+
         $("#edit_proj_dialog").dialog("open");
     });
 }
 
 function finish_editItem()
-{    
+{
     //Save the project to localStorage()
     var proj = {
                     key: $("#proj_id_e").html(),
@@ -248,15 +248,15 @@ function finish_editItem()
                     location: $("#proj_loc_e").html()
                };
     projects.save(proj, function(r) { /*callback function*/ });
-    
+
     window.location.reload();
 }
 
 function reInit()
 {
     $('.draggable').draggable('destroy');
-    $('.draggable').draggable({ 
-                                cancel: "a.ui-icon", 
+    $('.draggable').draggable({
+                                cancel: "a.ui-icon",
                                 revert: "invalid",
                                 helper: "clone"
                               });
@@ -288,18 +288,18 @@ function GetNotes()
 
     notes.query(GetProjectNotes, function(r) {
         r.sort(SortNotes);
-        
+
         var i;
         for(i = 0; i < r.length; i += 1 ) {
             var date = new Date(r[i].key * 1);
             var dateSTR = date.toString();
             var dateARR = dateSTR.split("GMT");
             dateSTR = dateARR[0];
-            
+
             noteSTR += "<p>" + r[i].body + "<br/><br/><i>Posted On: " + dateSTR + "</i></p>";
         }
     });
-    
+
     $("#dd_Notes").html(noteSTR);
 }
 
@@ -308,14 +308,14 @@ function SaveNote()
     if($("#NewNoteBody").val() !== "")
     {
         var date = new Date().getTime();
-        
+
         var note = {
                         key: date,
                         projID: $("#proj_id_dd").html(),
                         body: $("#NewNoteBody").val()
                    };
         notes.save(note, function(r) {  });
-        
+
         $("#NewNoteBody").val("");
         GetNotes();
     }

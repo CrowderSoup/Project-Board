@@ -1,139 +1,176 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="{{ HTML_LANG }}">
+
 <head>
-    <title>Project Board</title>
-    
-    <!--Styles-->
-    <link rel="stylesheet" href="css/reset.css" />
-    <link rel="stylesheet" href="css/text.css" />
-    <link rel="stylesheet" href="css/960.css" />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/jquery-ui.css" />
-    <link rel="stylesheet" href="css/jquery.colorpicker.css" />
-    
-    <!--Scripts-->
-    <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="js/jquery-ui-1.8.13.custom.min.js"></script>
-    <script type="text/javascript" src="js/jquery.colorpicker.js"></script>
-    <script type="text/javascript" src="js/artemia.pkg.lite.min.js"></script>
-    <script type="text/javascript" src="js/app.js"></script>
+  <meta charset="utf-8" />
+  <title>Project Board: Kahnban board for programmers</title>
+  <meta name="author" content="Aaron Crowder">
+
+  <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="static/font-awesome/css/font-awesome.min.css" />
+
+  <link rel="stylesheet" href="static/main.css" />
 </head>
+
 <body>
-    <div class="container_12">
-        <div id="MainHeader" class="grid_12">
-            <span id="MainHeader_txt">Project Board</span>
-            <button id="ClearStorage" onclick="clearLocalStorage()">Clear</button>
-        </div>
-        <div class="grid_6">
-            <div id="new">
-                <div class="inner">
-                    <div class="header">
-                        <span class="header_text">New</span>
-                        <span class="new_form">
-                            <input type="text" id="new_project" class="textbox" />
-                            <button id="btn_add_project" onclick="add_project();">Add</button>
-                        </span>
-                    </div>
-                    <div id="new_body" class="container">
-                    </div>
-                </div>
-            </div>
-            <div id="trash">
-                <div class="inner">
-                    <div class="header">
-                        <span class="header_text">Trash</span>
-                    </div>
-                    <div id="trash_body" class="container">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="in_progress" class="grid_6">
-            <div class="inner">
-                <div class="header">
-                    <span class="header_text">In Progress</span>
-                </div>
-                <div id="in_progress_body" class="container">
-                </div>
-            </div>
-        </div>
-        <div id="pending" class="grid_6">
-            <div class="inner">
-                <div class="header">
-                    <span class="header_text">Pending Client Response</span>
-                </div>
-                <div id="pending_body" class="container">
-                </div>
-            </div>
-        </div>
-        <div id="done" class="grid_6">
-            <div class="inner">
-                <div class="header">
-                    <span class="header_text">Done!</span>
-                </div>
-                <div id="done_body" class="container">
-                </div>
-            </div>
-        </div>
-        <div id="CopyRight" class="grid_12">
-            <p>Copyright &copy; <a href="http://aaroncrowder.com">Aaron Crowder</a>, 2011-Present.</p>
-        </div>
+  <nav class="navbar navbar-inverse">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar-collapse" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://crowdersoup.com/Project-Board" title="Kahnban Board for programmers">Project Board</a>
+      </div>
+
+      <div id="main-navbar-collapse" class="collapse navbar-collapse">
+        <form class="navbar-form navbar-right">
+          <button id="ClearStorage" class="btn btn-warning" onclick="clearLocalStorage()">Clear</button>
+        </form>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a class="blog-nav-item" href="http://crowdersoup.com">CrowderSoup Home</a></li>
+        </ul>
+      </div>
     </div>
-    
-    <!-- Add Project Dialog -->
-    <div id="add_proj_dialog" title="Add a Project">
-        <label for="proj_name">Project Name:</label><input type="textbox" id="proj_name" class="textbox" />
-        <label for="proj_due">Due date:</label><input type="textbox" id="proj_due" class="textbox" /><br/>
-        <label for="proj_url">Project URL:</label><input type="textbox" id="proj_url" class="textbox" style="width: 420px" /><br/>
-        <label for="proj_description">Description</lable><br/>
-        <textarea id="proj_description" cols="69" rows="5" class="textbox"></textarea>
-        <select id="color_picker" class="color_picker">
-            <option value="AFAFAF">AFAFAF</option>
-            <option value="E2161E">E2161E</option>
-            <option value="218F51">218F51</option>
-            <option value="E2AE3A">E2AE3A</option>
-            <option value="1E5FB8">1E5FB8</option>
-        </select>
-    </div>
-    
-    <!-- Edit Project Dialog -->
-    <div id="edit_proj_dialog" title="Edit your Project">
-        <label for="proj_name_e">Project Name:</label><input type="textbox" id="proj_name_e" class="textbox" />
-        <label for="proj_due_e">Due date:</label><input type="textbox" id="proj_due_e" class="textbox" /><br/>
-        <label for="proj_url_e">Project URL:</label><input type="textbox" id="proj_url_e" class="textbox" style="width: 420px" /><br/>
-        <label for="proj_description_e">Description</label><br/>
-        <textarea id="proj_description_e" cols="69" rows="5" class="textbox"></textarea>
-        <select id="color_picker_e">
-            <option value="AFAFAF">AFAFAF</option>
-            <option value="E2161E">E2161E</option>
-            <option value="218F51">218F51</option>
-            <option value="E2AE3A">E2AE3A</option>
-            <option value="1E5FB8">1E5FB8</option>
-        </select>
-        <span id="proj_id_e" style="display: none;"></span>
-        <span id="proj_loc_e" style="display: none;"></span>
-    </div>
-    
-    <!-- Drill Down Dialog -->
-    <div id="drill_into_proj" title="View your Project">
-        <div id="dd_ProjInfo">
-            <div id="dd_ProjInfo_HeaderDescrip">
-                <h3><span id="proj_name_dd"></span></h3>
-                <p><span id="proj_description_dd"></span></p>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-6">
+          <div id="new" class="panel panel-default">
+            <div class="panel-heading">
+              <div class="new_form input-group input-group-lg">
+                <span class="input-group-addon">New!</span>
+                <input type="text" id="new_project" class="form-control" />
+                <span class="input-group-btn">
+                  <button id="btn_add_project" class="btn btn-primary" onclick="add_project();">Add</button>
+                </span>
+              </div>
             </div>
-            <div id="dd_ProjInfo_DueURL">
-                <p><i>Due on: <span id="proj_due_dd"></span></i></p>
-                <p><i>URL:</i> <a id="proj_url_dd" target="_blank"></a></p>
+            <div id="new_body" class="panel-body container">
+
             </div>
-            <span id="proj_id_dd" style="display: none;"></span>
+          </div>
+          <div id="trash" class="panel panel-danger">
+            <div class="panel-heading">
+              <h3 class="panel-title">Trash</h3>
+            </div>
+            <div id="trash_body" class="panel-body">
+
+            </div>
+          </div>
         </div>
-        <div id="dd_ProjNotes">
-            <h3>Notes:</h3>
-            <textarea id="NewNoteBody" cols="130" rows="3" class="textbox"></textarea><br/>
-            <button id="SaveNote_BTN" type="button">Save Note</button>
-            
-            <div id="dd_Notes"></div>
+        <div class="col-md-6">
+          <div id="in_progress" class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">In Progress</h3>
+            </div>
+            <div id="in_progress_body" class="panel-body">
+
+            </div>
+          </div>
+          <div id="pending" class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Pending</h3>
+            </div>
+            <div id="pending_body" class="panel-body">
+
+            </div>
+          </div>
+          <div id="done" class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Done!</h3>
+            </div>
+            <div id="done_body" class="panel-body">
+
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Add Project Dialog -->
+  <div id="add_proj_dialog" title="Add a Project">
+    <label for="proj_name">Project Name:</label>
+    <input type="textbox" id="proj_name" class="textbox" />
+    <label for="proj_due">Due date:</label>
+    <input type="textbox" id="proj_due" class="textbox" />
+    <br/>
+    <label for="proj_url">Project URL:</label>
+    <input type="textbox" id="proj_url" class="textbox" style="width: 420px" />
+    <br/>
+    <label for="proj_description">Description</lable>
+      <br/>
+      <textarea id="proj_description" cols="69" rows="5" class="textbox"></textarea>
+      <select id="color_picker" class="color_picker">
+        <option value="AFAFAF">AFAFAF</option>
+        <option value="E2161E">E2161E</option>
+        <option value="218F51">218F51</option>
+        <option value="E2AE3A">E2AE3A</option>
+        <option value="1E5FB8">1E5FB8</option>
+      </select>
+  </div>
+
+  <!-- Edit Project Dialog -->
+  <div id="edit_proj_dialog" title="Edit your Project">
+    <label for="proj_name_e">Project Name:</label>
+    <input type="textbox" id="proj_name_e" class="textbox" />
+    <label for="proj_due_e">Due date:</label>
+    <input type="textbox" id="proj_due_e" class="textbox" />
+    <br/>
+    <label for="proj_url_e">Project URL:</label>
+    <input type="textbox" id="proj_url_e" class="textbox" style="width: 420px" />
+    <br/>
+    <label for="proj_description_e">Description</label>
+    <br/>
+    <textarea id="proj_description_e" cols="69" rows="5" class="textbox"></textarea>
+    <select id="color_picker_e">
+      <option value="AFAFAF">AFAFAF</option>
+      <option value="E2161E">E2161E</option>
+      <option value="218F51">218F51</option>
+      <option value="E2AE3A">E2AE3A</option>
+      <option value="1E5FB8">1E5FB8</option>
+    </select>
+    <span id="proj_id_e" style="display: none;"></span>
+    <span id="proj_loc_e" style="display: none;"></span>
+  </div>
+
+  <!-- Drill Down Dialog -->
+  <div id="drill_into_proj" title="View your Project">
+    <div id="dd_ProjInfo">
+      <div id="dd_ProjInfo_HeaderDescrip">
+        <h3><span id="proj_name_dd"></span></h3>
+        <p><span id="proj_description_dd"></span></p>
+      </div>
+      <div id="dd_ProjInfo_DueURL">
+        <p><i>Due on: <span id="proj_due_dd"></span></i></p>
+        <p><i>URL:</i>
+          <a id="proj_url_dd" target="_blank"></a>
+        </p>
+      </div>
+      <span id="proj_id_dd" style="display: none;"></span>
+    </div>
+    <div id="dd_ProjNotes">
+      <h3>Notes:</h3>
+      <textarea id="NewNoteBody" cols="130" rows="3" class="textbox"></textarea>
+      <br/>
+      <button id="SaveNote_BTN" type="button">Save Note</button>
+
+      <div id="dd_Notes"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="static/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="static/dragula/dragula.js"></script>
+  <script type="text/javascript" src="static/lawnchair/lawnchair.js"></script>
+  <script type="text/javascript" src="static/piklor/piklor.min.js"></script>
+  <script type="text/javascript" src="static/bootstrap/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="app/app-built.js"></script>
+
 </body>
+
 </html>
