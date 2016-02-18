@@ -3,7 +3,8 @@ static/bootstrap/*
 static/font-awesome/*
 static/jquery/*
 static/dragula/*
-static/lawnchair/*
+static/firebase/*
 static/piklor/*
+static/vue/*
 static/main.css
 app/app-built.js

@@ -21,11 +21,15 @@ var paths = {
     src: 'node_modules/dragula/dist/**/*',
     dest: 'dragula'
   }, {
-    src: 'node_modules/lawnchair/lib/**/*',
-    dest: 'lawnchair'
+    src: 'node_modules/firebase/lib/**/*',
+    dest: 'firebase'
   }, {
     src: 'node_modules/piklor.js/src/**/*',
     dest: 'piklor'
+  },
+  {
+    src: 'node_modules/vue/dist/**/*',
+    dest: 'vue'
   }],
   output: 'static/'
 };

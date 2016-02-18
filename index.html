@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ HTML_LANG }}">
+<html lang="en" id="app">
 
 <head>
   <meta charset="utf-8" />
@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="static/main.css" />
 </head>
 
-<body>
+<body v-cloak>
   <nav class="navbar navbar-inverse">
     <div class="container">
       <div class="navbar-header">
@@ -26,8 +26,9 @@
       </div>
 
       <div id="main-navbar-collapse" class="collapse navbar-collapse">
-        <form class="navbar-form navbar-right">
+        <form class="navbar-form navbar-right" v-show="isLoggedIn">
           <button id="ClearStorage" class="btn btn-warning" onclick="clearLocalStorage()">Clear</button>
+          <button class="btn btn-danger" v-on:click="logout">Logout</button>
         </form>
         <ul class="nav navbar-nav navbar-right">
           <li><a class="blog-nav-item" href="http://crowdersoup.com">CrowderSoup Home</a></li>
@@ -36,64 +37,63 @@
     </div>
   </nav>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="col-md-6">
-          <div id="new" class="panel panel-default">
-            <div class="panel-heading">
-              <div class="new_form input-group input-group-lg">
-                <span class="input-group-addon">New!</span>
-                <input type="text" id="new_project" class="form-control" />
-                <span class="input-group-btn">
-                  <button id="btn_add_project" class="btn btn-primary" onclick="add_project();">Add</button>
-                </span>
-              </div>
-            </div>
-            <div id="new_body" class="panel-body container">
-
-            </div>
-          </div>
-          <div id="trash" class="panel panel-danger">
-            <div class="panel-heading">
-              <h3 class="panel-title">Trash</h3>
-            </div>
-            <div id="trash_body" class="panel-body">
-
-            </div>
+  <div v-show="isLoggedIn">
+    <div class="col-md-3">
+      <div id="new" class="panel panel-default">
+        <div class="panel-heading">
+          <div class="new_form input-group input-group-sm">
+            <span class="input-group-addon">New!</span>
+            <input type="text" id="new_project" class="form-control" />
+            <span class="input-group-btn">
+              <button id="btn_add_project" class="btn btn-primary" onclick="add_project();">Add</button>
+            </span>
           </div>
         </div>
-        <div class="col-md-6">
-          <div id="in_progress" class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">In Progress</h3>
-            </div>
-            <div id="in_progress_body" class="panel-body">
+        <div id="new_body" class="panel-body container">
 
-            </div>
-          </div>
-          <div id="pending" class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">Pending</h3>
-            </div>
-            <div id="pending_body" class="panel-body">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div id="in_progress" class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">In Progress</h3>
+        </div>
+        <div id="in_progress_body" class="panel-body">
 
-            </div>
-          </div>
-          <div id="done" class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">Done!</h3>
-            </div>
-            <div id="done_body" class="panel-body">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div id="pending" class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Pending</h3>
+        </div>
+        <div id="pending_body" class="panel-body">
 
-            </div>
-          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div id="done" class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Done!</h3>
+        </div>
+        <div id="done_body" class="panel-body">
+
         </div>
       </div>
     </div>
   </div>
+  <div v-else>
+    <div class="col-md-12 text-center">
+      <button type="button" name="twitter_login" class="btn btn-primary" data-provider="twitter" v-on:click="login">
+        Sign In with Twitter <i class="fa fa-twitter"></i>
+      </button>
+    </div>
+  </div>
 
-  <!-- Add Project Dialog -->
+  <!-- Add Project Dialog
   <div id="add_proj_dialog" title="Add a Project">
     <label for="proj_name">Project Name:</label>
     <input type="textbox" id="proj_name" class="textbox" />
@@ -113,9 +113,9 @@
         <option value="E2AE3A">E2AE3A</option>
         <option value="1E5FB8">1E5FB8</option>
       </select>
-  </div>
+  </div> -->
 
-  <!-- Edit Project Dialog -->
+  <!-- Edit Project Dialog
   <div id="edit_proj_dialog" title="Edit your Project">
     <label for="proj_name_e">Project Name:</label>
     <input type="textbox" id="proj_name_e" class="textbox" />
@@ -137,9 +137,9 @@
     </select>
     <span id="proj_id_e" style="display: none;"></span>
     <span id="proj_loc_e" style="display: none;"></span>
-  </div>
+  </div> -->
 
-  <!-- Drill Down Dialog -->
+  <!-- Drill Down Dialog
   <div id="drill_into_proj" title="View your Project">
     <div id="dd_ProjInfo">
       <div id="dd_ProjInfo_HeaderDescrip">
@@ -162,13 +162,13 @@
 
       <div id="dd_Notes"></div>
     </div>
-  </div>
+  </div> -->
 
   <script type="text/javascript" src="static/jquery/jquery.min.js"></script>
   <script type="text/javascript" src="static/dragula/dragula.js"></script>
-  <script type="text/javascript" src="static/lawnchair/lawnchair.js"></script>
   <script type="text/javascript" src="static/piklor/piklor.min.js"></script>
   <script type="text/javascript" src="static/bootstrap/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="static/vue/vue.min.js"></script>
   <script type="text/javascript" src="app/app-built.js"></script>
 
 </body>
