@@ -5,7 +5,32 @@ var app = function() {
   // Members
 
   var db = new Firebase('https://projectboard.firebaseio.com/');
-  console.log(db.getAuth());
+  db.onAuth(function(authData) {
+    if (authData !== null) {
+      var usersRef = new Firebase('https://projectboard.firebaseio.com/users/');
+      usersRef.child(authData.uid).once('value', function(snapshot) {
+        var isNewUser = snapshot.val() === null;
+
+        if(isNewUser) {
+          usersRef.child(authData.uid).set({
+            provider: authData.provider,
+            name: getName(authData)
+          });
+        }
+      });
+    }
+  });
+
+  function getName(authData) {
+    switch (authData.provider) {
+      case 'password':
+        return authData.password.email.replace(/@.*/, '');
+      case 'twitter':
+        return authData.twitter.displayName;
+      case 'facebook':
+        return authData.facebook.displayName;
+    }
+  }
 
   // end Members
 
