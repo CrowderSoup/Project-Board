@@ -1,21 +1,11 @@
 var app = require('./projectBoard');
 
-var projectboard = new app();
-var auth = projectboard.getAuth();
-
 var vue = new Vue({
   el: '#app',
   data: {
-    user: (function() {
-      var user = null;
-      if(auth) {
-        user = auth[auth.provider];
-      }
-      return user;
-    })(),
-    isLoggedIn: (function() {
-      return (auth) ? true : false;
-    })()
+    user: undefined,
+    isLoggedIn: false,
+    columns: []
   },
   methods: {
     login: function(event) {
@@ -24,7 +14,7 @@ var vue = new Vue({
       projectboard.doLogin(provider)
         .then(function(user) {
           console.log(user);
-          this.user = user;
+          this.user = projectboard.user;
           this.isLoggedIn = true;
         }.bind(this))
         .fail(function(err) {
@@ -39,3 +29,12 @@ var vue = new Vue({
     }
   }
 });
+
+var projectboard = new app();
+
+// Let's see if the user is already authenticated
+projectboard.getAuth();
+if (projectboard.user) {
+  vue.user = projectboard.user;
+  vue.isLoggedIn = true;
+}

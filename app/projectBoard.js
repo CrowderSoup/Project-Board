@@ -1,23 +1,105 @@
 var Firebase = require('firebase');
 var project = require('./project');
+var user = require('./user');
 
 module.exports = function() {
-  // Members
+  var self = this;
+
+  // Private Members
 
   var db = new Firebase('https://projectboard.firebaseio.com/');
+  var userRef = null;
+
+  // end Private Members
+
+  // Public Memebers
+
+  self.user = null;
+  self.columns = null;
+
+  // end Public Members
+
+  // Private Methods
+
+  var getUsername = function(authData) {
+    var userName = '';
+
+    if (authData.twitter) {
+      userName = authData.twitter.username;
+    } else if (authData.github) {
+      userName = authData.github.username;
+    } else {
+      throw Error('Only Github or Twitter auth allowed!');
+    }
+
+    return userName;
+  };
+
+  var createUser = function(usersRef, user) {
+    usersRef.child(self.user.uid).set({
+      provider: self.user.provider,
+      username: self.user.username
+    });
+  };
+
+  var getUserRef = function(usersRef) {
+    return usersRef.child(self.user.uid);
+  }
+
+  // end Private Methods
+
+  // Methods
+
+  self.getAuth = function() {
+    var auth = db.getAuth();
+    if (auth !== null) {
+      self.user = new user(auth.uid, auth.provider, getUsername(auth));
+      console.log(self.user);
+    }
+  };
+
+  self.doLogin = function(provider) {
+    return $.Deferred(function(dfd) {
+      db.authWithOAuthPopup(provider, function(err, user) {
+        if (err) {
+          dfd.reject(err);
+        }
+
+        if (user) {
+          dfd.resolve(user);
+        }
+      });
+    });
+  };
+
+  self.doLogout = function() {
+    db.unauth();
+  };
+
+  self.getColumns = function() {
+    var columnsRef = userRef.child('columns');
+    columnsRef.orderByChild('columnOrder').on('value', function(snapshot) {
+      self.columns = snapshot.val();
+    });
+  };
+
+  // end Methods
+
+  // Events
+
   db.onAuth(function(authData) {
     if (authData !== null) {
+      self.user = new user(authData.uid, authData.provider, getUsername(authData));
+
       var usersRef = new Firebase('https://projectboard.firebaseio.com/users/');
-      usersRef.child(authData.uid).once('value', function(snapshot) {
+      usersRef.child(self.user.uid).once('value', function(snapshot) {
         var isNewUser = snapshot.val() === null;
 
-        if(isNewUser) {
-          usersRef.child(authData.uid).set({
-            provider: authData.provider,
-            name: getUsername(authData)
-          });
+        if (isNewUser) {
+          createUser(usersRef);
 
-          var userRef = usersRef.child(authData.uid);
+          userRef = getUserRef(usersRef);
+
           userRef.child('columns').set({
             'New': {
               columnDisplayName: 'New',
@@ -40,56 +122,17 @@ module.exports = function() {
               columnOrder: 3
             }
           });
+        } else {
+          userRef = getUserRef(usersRef);
         }
+
+        // Get columns and projects
+        self.getColumns();
       });
     }
   });
 
-  // end Members
+  // end Events
 
-  // Private Methods
-
-  var getUsername = function(authData) {
-    var userName = '';
-
-    if(authData.twitter) {
-      userName = authData.twitter.username;
-    } else if (authData.github) {
-      userName = authData.github.username;
-    } else {
-      throw Error('Only Github or Twitter auth allowed!');
-    }
-
-    return userName;
-  }
-
-  // end Private Methods
-
-  // Methods
-
-  this.getAuth = function() {
-    return db.getAuth();
-  };
-
-  this.doLogin = function(provider) {
-    return $.Deferred(function(dfd) {
-      db.authWithOAuthPopup(provider, function(err, user) {
-        if (err) {
-          dfd.reject(err);
-        }
-
-        if (user) {
-          dfd.resolve(user);
-        }
-      });
-    });
-  };
-
-  this.doLogout = function() {
-    db.unauth();
-  }
-
-  // end Methods
-
-  return this;
+  return self;
 };

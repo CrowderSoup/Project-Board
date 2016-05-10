@@ -1,5 +1,5 @@
 module.exports = function() {
-  this.generateUUID() {
+  this.generateUUID = function() {
     var d = new Date().getTime();
     if (window.performance && typeof window.performance.now === "function") {
       d += performance.now(); //use high-precision timer if available
@@ -11,6 +11,12 @@ module.exports = function() {
     });
     return uuid;
   }
+
+  this.notNullOrEmpty = function(value, name) {
+    if(!value || $.trim(value) === ''){
+      throw new Error(name + ' cannot be null or empty!');
+    }
+  };
 
   return this;
 }

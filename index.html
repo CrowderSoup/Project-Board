@@ -25,8 +25,8 @@
         <a class="navbar-brand" href="http://crowdersoup.com/Project-Board" title="Kahnban Board for programmers">Project Board</a>
       </div>
 
-      <div id="main-navbar-collapse" class="collapse navbar-collapse" v-show="isLoggedIn">
-        <ul class="nav navbar-nav navbar-right">
+      <div id="main-navbar-collapse" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right" v-show="isLoggedIn">
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
             {{ user.username }} <span class="caret"></span>
@@ -39,15 +39,18 @@
             </ul>
           </li>
         </ul>
-        <form class="navbar-form navbar-right">
+        <form class="navbar-form navbar-right" v-show="isLoggedIn">
           <button id="ClearStorage" class="btn btn-warning" onclick="clearLocalStorage()">Clear</button>
           <button class="btn btn-danger" v-on:click="logout">Logout</button>
         </form>
       </div>
     </div>
   </nav>
-
+  
   <div v-show="isLoggedIn">
+    <div v-for="column in columns">
+      {{ column.columnDisplayName }}
+    </div>
     <div class="col-md-3">
       <div id="new" class="panel panel-default">
         <div class="panel-heading">
