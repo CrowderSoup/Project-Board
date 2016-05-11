@@ -8,20 +8,20 @@ var vue = new Vue({
     columns: []
   },
   methods: {
-    login: function(event) {
+    login: function (event) {
       var provider = $(event.target).data('provider');
 
       projectboard.doLogin(provider)
-        .then(function(user) {
+        .then(function (user) {
           console.log(user);
           this.user = projectboard.user;
           this.isLoggedIn = true;
         }.bind(this))
-        .fail(function(err) {
+        .fail(function (err) {
           console.log(err);
         }.bind(this));
     },
-    logout: function(event) {
+    logout: function (event) {
       this.user = null;
       this.isLoggedIn = false;
 
@@ -33,8 +33,14 @@ var vue = new Vue({
 var projectboard = new app();
 
 // Let's see if the user is already authenticated
-projectboard.getAuth();
-if (projectboard.user) {
-  vue.user = projectboard.user;
-  vue.isLoggedIn = true;
-}
+$.when(projectboard.getAuth())
+  .then(function () {
+    if (projectboard.user) {
+      vue.user = projectboard.user;
+      vue.isLoggedIn = true;
+      vue.columns = projectboard.columns;
+    }
+  })
+  .fail(function () {
+    // User isn't logged in...
+  });

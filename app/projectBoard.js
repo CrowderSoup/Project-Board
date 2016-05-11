@@ -2,7 +2,7 @@ var Firebase = require('firebase');
 var project = require('./project');
 var user = require('./user');
 
-module.exports = function() {
+module.exports = function () {
   var self = this;
 
   // Private Members
@@ -21,7 +21,7 @@ module.exports = function() {
 
   // Private Methods
 
-  var getUsername = function(authData) {
+  var getUsername = function (authData) {
     var userName = '';
 
     if (authData.twitter) {
@@ -35,14 +35,14 @@ module.exports = function() {
     return userName;
   };
 
-  var createUser = function(usersRef, user) {
+  var createUser = function (usersRef, user) {
     usersRef.child(self.user.uid).set({
       provider: self.user.provider,
       username: self.user.username
     });
   };
 
-  var getUserRef = function(usersRef) {
+  var getUserRef = function (usersRef) {
     return usersRef.child(self.user.uid);
   }
 
@@ -50,17 +50,27 @@ module.exports = function() {
 
   // Methods
 
-  self.getAuth = function() {
-    var auth = db.getAuth();
-    if (auth !== null) {
-      self.user = new user(auth.uid, auth.provider, getUsername(auth));
-      console.log(self.user);
-    }
+  self.getAuth = function () {
+    return $.Deferred(function (dfd) {
+      var auth = db.getAuth();
+      if (auth !== null) {
+        self.user = new user(auth.uid, auth.provider, getUsername(auth));
+
+        // We're logged in so we need to load the columns
+        $.when(self.getColumns())
+          .then(function(){
+            dfd.resolve(true);
+          });
+      } else {
+        dfd.reject();
+      }
+    });
+
   };
 
-  self.doLogin = function(provider) {
-    return $.Deferred(function(dfd) {
-      db.authWithOAuthPopup(provider, function(err, user) {
+  self.doLogin = function (provider) {
+    return $.Deferred(function (dfd) {
+      db.authWithOAuthPopup(provider, function (err, user) {
         if (err) {
           dfd.reject(err);
         }
@@ -72,27 +82,36 @@ module.exports = function() {
     });
   };
 
-  self.doLogout = function() {
+  self.doLogout = function () {
     db.unauth();
   };
 
-  self.getColumns = function() {
-    var columnsRef = userRef.child('columns');
-    columnsRef.orderByChild('columnOrder').on('value', function(snapshot) {
-      self.columns = snapshot.val();
+  self.getColumns = function () {
+    return $.Deferred(function (dfd) {
+      if (userRef === null) {
+        var usersRef = new Firebase('https://projectboard.firebaseio.com/users/');
+        userRef = getUserRef(usersRef);
+      }
+
+      var columnsRef = userRef.child('columns');
+      columnsRef.orderByChild('columnOrder').on('value', function (snapshot) {
+        self.columns = snapshot.val();
+        dfd.resolve(true);
+      });
     });
+
   };
 
   // end Methods
 
   // Events
 
-  db.onAuth(function(authData) {
+  db.onAuth(function (authData) {
     if (authData !== null) {
       self.user = new user(authData.uid, authData.provider, getUsername(authData));
 
       var usersRef = new Firebase('https://projectboard.firebaseio.com/users/');
-      usersRef.child(self.user.uid).once('value', function(snapshot) {
+      usersRef.child(self.user.uid).once('value', function (snapshot) {
         var isNewUser = snapshot.val() === null;
 
         if (isNewUser) {
