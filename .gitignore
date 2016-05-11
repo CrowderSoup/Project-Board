@@ -6,5 +6,6 @@ static/dragula/*
 static/firebase/*
 static/piklor/*
 static/vue/*
+static/underscore/*
 static/main.css
 app/app-built.js

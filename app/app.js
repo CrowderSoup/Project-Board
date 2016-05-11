@@ -39,6 +39,7 @@ $.when(projectboard.getAuth())
       vue.user = projectboard.user;
       vue.isLoggedIn = true;
       vue.columns = projectboard.columns;
+      debugger;
     }
   })
   .fail(function () {

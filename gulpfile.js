@@ -30,6 +30,10 @@ var paths = {
   {
     src: 'node_modules/vue/dist/**/*',
     dest: 'vue'
+  },
+  {
+    src: 'node_modules/underscore/**/*',
+    dest: 'underscore'
   }],
   output: 'static/'
 };

@@ -46,54 +46,23 @@
       </div>
     </div>
   </nav>
-  
+
   <div v-show="isLoggedIn">
     <div v-for="column in columns">
-      {{ column.columnDisplayName }}
-    </div>
-    <div class="col-md-3">
-      <div id="new" class="panel panel-default">
-        <div class="panel-heading">
-          <div class="new_form input-group input-group-sm">
-            <span class="input-group-addon">New!</span>
-            <input type="text" id="new_project" class="form-control" />
-            <span class="input-group-btn">
+      <div class="col-md-3">
+        <div id="{{ column.columnId }}" class="panel panel-{{ column.columnStyle }}">
+          <div class="panel-heading">
+            <div class="new_form input-group input-group-sm">
+              <span class="input-group-addon">{{ column.columnDisplayName }}</span>
+              <input type="text" id="new_project" class="form-control" />
+              <span class="input-group-btn">
               <button id="btn_add_project" class="btn btn-primary" onclick="add_project();">Add</button>
             </span>
+            </div>
           </div>
-        </div>
-        <div id="new_body" class="panel-body container">
+          <div id="{{ column.columnId }}_body" class="panel-body container">
 
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div id="in_progress" class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">In Progress</h3>
-        </div>
-        <div id="in_progress_body" class="panel-body">
-
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div id="pending" class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Pending</h3>
-        </div>
-        <div id="pending_body" class="panel-body">
-
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div id="done" class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Done!</h3>
-        </div>
-        <div id="done_body" class="panel-body">
-
+          </div>
         </div>
       </div>
     </div>
@@ -185,6 +154,7 @@
   <script type="text/javascript" src="static/piklor/piklor.min.js"></script>
   <script type="text/javascript" src="static/bootstrap/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="static/vue/vue.min.js"></script>
+  <script type="text/javascript" src="static/underscore/underscore-min.js"></script>
   <script type="text/javascript" src="app/app-built.js"></script>
 
 </body>

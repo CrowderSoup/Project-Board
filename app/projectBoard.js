@@ -45,6 +45,18 @@ module.exports = function () {
   var getUserRef = function (usersRef) {
     return usersRef.child(self.user.uid);
   }
+  
+  var sortColumns = function(columns) {
+    var sortable = [];
+    for(var key in columns) {
+      sortable.push(columns[key]);
+    }
+    return sortable.sort(compareColumns);
+  };
+  
+  var compareColumns = function(a, b) {
+    return a.columnOrder - b.columnOrder;
+  };
 
   // end Private Methods
 
@@ -95,7 +107,8 @@ module.exports = function () {
 
       var columnsRef = userRef.child('columns');
       columnsRef.orderByChild('columnOrder').on('value', function (snapshot) {
-        self.columns = snapshot.val();
+        var columns = snapshot.val();
+        self.columns = sortColumns(columns);
         dfd.resolve(true);
       });
     });
