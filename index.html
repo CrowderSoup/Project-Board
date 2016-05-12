@@ -32,17 +32,16 @@
             {{ user.username }} <span class="caret"></span>
           </a>
             <ul class="dropdown-menu">
+              <li><a href="#"><i class="fa fa-eraser"></i>Clear</a></li>
+              <li role="separator" class="divider"></li>
               <li><a href="#"><i class="fa fa-plus"></i> Add Column</a></li>
               <li><a href="#"><i class="fa fa-edit"></i> Edit Columns</a></li>
               <li role="separator" class="divider"></li>
+              <li><a href="#" v-on:click="logout"><i class="fa fa-sign-out"></i>Logout</a></li>
               <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
             </ul>
           </li>
         </ul>
-        <form class="navbar-form navbar-right" v-show="isLoggedIn">
-          <button id="ClearStorage" class="btn btn-warning" onclick="clearLocalStorage()">Clear</button>
-          <button class="btn btn-danger" v-on:click="logout">Logout</button>
-        </form>
       </div>
     </div>
   </nav>
@@ -60,7 +59,7 @@
             </span>
             </div>
           </div>
-          <div id="{{ column.columnId }}_body" class="panel-body container">
+          <div id="{{ column.columnId }}_body" class="panel-body">
 
           </div>
         </div>
