@@ -101,7 +101,7 @@ module.exports = function () {
   self.getColumns = function () {
     return $.Deferred(function (dfd) {
       if (userRef === null) {
-        var usersRef = new Firebase('https://projectboard.firebaseio.com/users/');
+        usersRef = new Firebase('https://projectboard.firebaseio.com/users/');
         userRef = getUserRef(usersRef);
       }
 
@@ -109,6 +109,7 @@ module.exports = function () {
       columnsRef.orderByChild('columnOrder').on('value', function (snapshot) {
         var columns = snapshot.val();
         self.columns = sortColumns(columns);
+        console.log(self.columns);
         dfd.resolve(true);
       });
     });
@@ -124,7 +125,9 @@ module.exports = function () {
       self.user = new user(authData.uid, authData.provider, getUsername(authData));
 
       var usersRef = new Firebase('https://projectboard.firebaseio.com/users/');
-      usersRef.child(self.user.uid).once('value', function (snapshot) {
+      userRef = getUserRef(usersRef);
+      userRef.once('value', function (snapshot) {
+        debugger;
         var isNewUser = snapshot.val() === null;
 
         if (isNewUser) {
@@ -157,10 +160,11 @@ module.exports = function () {
         } else {
           userRef = getUserRef(usersRef);
         }
-
-        // Get columns and projects
-        self.getColumns();
       });
+      
+      debugger;
+      // Get columns and projects
+      self.getColumns();
     }
   });
 

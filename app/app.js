@@ -1,4 +1,5 @@
 var app = require('./projectBoard');
+var projectboard = new app();
 
 var vue = new Vue({
   el: '#app',
@@ -10,7 +11,7 @@ var vue = new Vue({
   methods: {
     login: function (event) {
       var provider = $(event.target).data('provider');
-
+      
       projectboard.doLogin(provider)
         .then(function (user) {
           console.log(user);
@@ -29,8 +30,6 @@ var vue = new Vue({
     }
   }
 });
-
-var projectboard = new app();
 
 // Let's see if the user is already authenticated
 $.when(projectboard.getAuth())
